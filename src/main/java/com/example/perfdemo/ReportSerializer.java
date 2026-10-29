@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
- * 报表文本序列化示例（变体场景：第 3 次提交只修复 SimpleDateFormat，循环拼接仍然保留）。
+ * 报表文本序列化示例（第 1 次提交：性能友好的基线实现）。
  */
 public class ReportSerializer {
 
@@ -16,11 +16,11 @@ public class ReportSerializer {
     }
 
     public String joinTags(List<String> tags) {
-        String result = "";
+        StringBuilder builder = new StringBuilder();
         for (String tag : tags) {
-            result = result + "[" + tag + "]";
+            builder.append('[').append(tag).append(']');
         }
-        return result + "@" + DAY_FORMAT.format(LocalDate.now());
+        return builder.toString();
     }
 
     public String describe(String name, int count) {
