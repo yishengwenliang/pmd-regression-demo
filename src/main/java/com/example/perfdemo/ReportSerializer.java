@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
- * 报表文本序列化示例（第 2 次提交：故意引入性能问题）。
+ * 报表文本序列化示例（第 1 次提交：性能友好的基线实现）。
  */
 public class ReportSerializer {
 
@@ -16,16 +16,14 @@ public class ReportSerializer {
     }
 
     public String joinTags(List<String> tags) {
-        String result = "";
+        StringBuilder builder = new StringBuilder();
         for (String tag : tags) {
-            result = result + "[" + tag + "]";
+            builder.append('[').append(tag).append(']');
         }
-        return result;
+        return builder.toString();
     }
 
     public String describe(String name, int count) {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("name=" + name + ", count=" + count);
-        return buffer.toString();
+        return "name=" + name + ", count=" + count;
     }
 }
