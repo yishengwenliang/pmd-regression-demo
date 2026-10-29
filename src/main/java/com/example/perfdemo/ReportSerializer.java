@@ -1,13 +1,11 @@
 package com.example.perfdemo;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 
 /**
- * 报表文本序列化示例（变体场景：第 2 次提交仍在 joinTags，再引入 SimpleDateFormat）。
+ * 报表文本序列化示例（变体场景：第 3 次提交只修复 SimpleDateFormat，循环拼接仍然保留）。
  */
 public class ReportSerializer {
 
@@ -22,8 +20,7 @@ public class ReportSerializer {
         for (String tag : tags) {
             result = result + "[" + tag + "]";
         }
-        SimpleDateFormat stamp = new SimpleDateFormat("HH:mm:ss");
-        return result + "@" + stamp.format(new Date());
+        return result + "@" + DAY_FORMAT.format(LocalDate.now());
     }
 
     public String describe(String name, int count) {
