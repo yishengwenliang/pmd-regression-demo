@@ -26,3 +26,18 @@
 4. 如需同时验证「新迭代扫描干净」：再建迭代 B，基准 `step2-violation`、目标 `step3-fix` 扫描即可。
 
 > 扫描引擎只分析 base→target diff 命中的方法，因此迭代的基准分支必须是问题引入前的提交（`step1-baseline`）。
+
+## Semgrep 行内规则演示（循环内 remove）
+
+独立于上面的 PMD 三次提交，从 `main` 切出：
+
+| 提交 | 分支指针 | 内容 |
+|---|---|---|
+| 1 `feat: 引入 Semgrep 循环内 remove 违规` | `semgrep-loop-remove-violation` | 新增 `InventoryCleaner`：增强 for 中 `remove`、下标 for 中 `remove` |
+| 2 `fix: 修复循环内 remove 违规` | `semgrep-loop-remove-fix` | 改为 `removeIf` / 先收集再删除 |
+
+规则 `inhouse.java-loop-remove-violation` 的 YAML 放在 `semgrep/inhouse.java-loop-remove-violation.yml`，
+与规则库中的同名规则一致；预期在 `InventoryCleaner` 上命中 2 条 ERROR（均已在 Semgrep 1.183.0 实测）。
+
+演示：规则启用后新建迭代，基准 `main`（无该类）、目标 `semgrep-loop-remove-violation` 扫描 → 2 条问题；
+一键回归目标切到 `semgrep-loop-remove-fix` → 全部判定为已解决。

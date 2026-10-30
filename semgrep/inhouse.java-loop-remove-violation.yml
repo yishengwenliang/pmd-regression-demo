@@ -1,0 +1,20 @@
+rules:
+  - id: inhouse.java-loop-remove-violation
+    languages: [java]
+    message: "检测到在循环内部直接修改（remove）正在遍历的集合 $COL。这会导致 ConcurrentModificationException 异常或漏删元素。"
+    severity: ERROR
+    pattern-either:
+      # 1. Enhanced for-loop (ForEach) violation
+      - pattern: |
+          for ($TYPE $VAR : $COL) {
+            ...
+            $COL.remove(...);
+            ...
+          }
+      # 2. Standard for-loop index-based deletion violation
+      - pattern: |
+          for (int $I = $START; $I < $COL.size(); $I++) {
+            ...
+            $COL.remove($I);
+            ...
+          }
