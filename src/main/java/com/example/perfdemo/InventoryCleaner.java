@@ -1,25 +1,20 @@
 package com.example.perfdemo;
 
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
- * 标签/序列号清理示例（Semgrep 行内规则 inhouse.java-loop-remove-violation 触发代码）。
+ * 标签/序列号清理示例（Semgrep 行内规则 inhouse.java-loop-remove-violation 修复后）。
  */
 public class InventoryCleaner {
 
     public void removeExpiredTags(List<String> tags) {
-        for (String tag : tags) {
-            if (tag.startsWith("expired-")) {
-                tags.remove(tag);
-            }
-        }
+        tags.removeIf(tag -> tag.startsWith("expired-"));
     }
 
     public void removeDuplicatedSerials(List<String> serials) {
-        for (int i = 0; i < serials.size(); i++) {
-            if (serials.indexOf(serials.get(i)) != i) {
-                serials.remove(i);
-            }
-        }
+        Set<String> seen = new LinkedHashSet<>();
+        serials.removeIf(serial -> !seen.add(serial));
     }
 }
